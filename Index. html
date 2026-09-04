@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিশন কুইজ পোর্টাল</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; }
+        .box { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #1a365d; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn { padding: 15px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+        .p { background: #3182ce; } .c { background: #dd6b20; }
+        .b { background: #38a169; } .m { background: #805ad5; }
+        .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; text-align: left; font-size: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <div id="dash">
+        <h1>🎯 কুইজ পোর্টাল</h1>
+        <div class="grid">
+            <button class="btn p" onclick="start('Physics')">পদার্থবিজ্ঞান</button>
+            <button class="btn c" onclick="start('Chemistry')">রসায়ন</button>
+            <button class="btn b" onclick="start('Biology')">জীববিজ্ঞান</button>
+            <button class="btn m" onclick="start('Math')">উচ্চতর গণিত</button>
+        </div>
+    </div>
+
+    <div id="quiz" style="display:none;">
+        <h2 id="title"></h2>
+        <h3 id="q-text"></h3>
+        <div id="opts"></div>
+    </div>
+
+    <div id="res" style="display:none; text-align:center;">
+        <h2>পরীক্ষা শেষ!</h2>
+        <p id="score" style="font-size:20px; font-weight:bold;"></p>
+        <button class="btn p" onclick="location.reload()">আবার শুরু করুন</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
