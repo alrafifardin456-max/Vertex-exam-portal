@@ -3,41 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>এডমিশন কুইজ পোর্টাল</title>
+    <title>লাইভ এডমিশন এক্সাম পোর্টাল</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; }
-        .box { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1, h2 { text-align: center; color: #1a365d; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn { padding: 15px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
-        .p { background: #3182ce; } .c { background: #dd6b20; }
-        .b { background: #38a169; } .m { background: #805ad5; }
-        .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; text-align: left; font-size: 15px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; margin: 0; padding: 10px; }
+        .box { background: white; padding: 20px; border-radius: 12px; max-width: 600px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #1e293b; margin-top: 0; }
+        
+        .exam-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; background: #f8fafc; }
+        .exam-title { font-size: 18px; font-weight: bold; color: #0f172a; }
+        .exam-time { font-size: 13px; color: #64748b; margin: 5px 0 10px 0; }
+        
+        .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; color: white; cursor: pointer; display: inline-block; }
+        .btn-start { background: #2563eb; width: 100%; font-size: 16px; }
+        .btn-disabled { background: #94a3b8; cursor: not-allowed; width: 100%; font-size: 16px; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; }
+        .timer { font-size: 16px; font-weight: bold; color: #dc2626; }
+        
+        /* প্রশ্ন প্যালেট (উদ্ভাস স্টাইল) */
+        .palette { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; justify-content: center; }
+        .p-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #cbd5e1; background: #white; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .p-btn.answered { background: #22c55e; color: white; border-color: #22c55e; }
+        .p-btn.current { border: 2px solid #2563eb; font-weight: 900; }
+
+        .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; text-align: left; font-size: 15px; cursor: pointer; }
+        .opt.selected { background: #dbeafe; border-color: #2563eb; font-weight: bold; }
+        
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 15px; gap: 8px; }
+        .btn-nav { background: #475569; flex: 1; }
+        .btn-clear { background: #ef4444; }
+        .btn-submit { background: #16a34a; flex: 1; }
+
+        .summary { text-align: left; margin-top: 15px; border-top: 2px solid #e2e8f0; padding-top: 10px; }
+        .explanation { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 8px 12px; font-size: 13px; margin-top: 5px; color: #166534; }
+        .correct-ans { color: #16a34a; font-weight: bold; }
+        .wrong-ans { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="box">
+    <!-- লাইভ এক্সাম ড্যাশবোর্ড -->
     <div id="dash">
-        <h1>🎯 কুইজ পোর্টাল</h1>
-        <div class="grid">
-            <button class="btn p" onclick="start('Physics')">পদার্থবিজ্ঞান</button>
-            <button class="btn c" onclick="start('Chemistry')">রসায়ন</button>
-            <button class="btn b" onclick="start('Biology')">জীববিজ্ঞান</button>
-            <button class="btn m" onclick="start('Math')">উচ্চতর গণিত</button>
-        </div>
+        <h1>🚀 লাইভ এক্সাম পোর্টাল</h1>
+        <p style="text-align: center; color: #64748b; font-size: 14px;">বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি</p>
+        <div id="exam-list"></div>
     </div>
 
+    <!-- কুইজ রানিং স্ক্রিন -->
     <div id="quiz" style="display:none;">
-        <h2 id="title"></h2>
-        <h3 id="q-text"></h3>
+        <div class="top-bar">
+            <span id="sub-tag" style="font-weight: bold; color: #334155;"></span>
+            <div class="timer">⏱️ সময় বাকি: <span id="time">00:00</span></div>
+        </div>
+
+        <!-- নেভিগেশন নম্বর প্যালেট -->
+        <div class="palette" id="palette"></div>
+
+        <h3 id="q-text" style="margin-bottom: 15px;"></h3>
         <div id="opts"></div>
+
+        <div class="nav-btns">
+            <button class="btn btn-nav" onclick="prevQ()">Previous</button>
+            <button class="btn btn-clear" onclick="clearAns()">Clear</button>
+            <button class="btn btn-nav" onclick="nextQ()">Next</button>
+        </div>
+        <button class="btn btn-submit" style="width: 100%; margin-top: 15px;" onclick="confirmSubmit()">Submit Exam</button>
     </div>
 
-    <div id="res" style="display:none; text-align:center;">
-        <h2>পরীক্ষা শেষ!</h2>
-        <p id="score" style="font-size:20px; font-weight:bold;"></p>
-        <button class="btn p" onclick="location.reload()">আবার শুরু করুন</button>
+    <!-- রেজাল্ট এবং সলিউশন স্ক্রিন -->
+    <div id="res" style="display:none;">
+        <h2>📊 পরীক্ষার ফলাফল</h2>
+        <div id="score-card" style="text-align:center; font-size:18px; margin-bottom:15px; background: #f8fafc; padding: 15px; border-radius: 8px;"></div>
+        <div id="review-sec" class="summary"></div>
+        <button class="btn btn-start" style="margin-top:15px;" onclick="location.reload()">ড্যাশবোর্ডে ফিরে যান</button>
     </div>
 </div>
 
